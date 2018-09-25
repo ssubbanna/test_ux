@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+    <info organisation="netsight" module="Webapps/Monitor/web/images/features/maps/backgrounds" revision="${pubver}"/>
+    <publications>
+        <artifact name="Enterasys-Andover-3rdfl.jpg" ext=""/>
+        <artifact name="Enterasys-Andover-1stfl.jpg" ext=""/>
+        <artifact name="Enterasys-Andover-2ndfl.jpg" ext=""/>
+        <artifact name="Enterasys-Andover-External.png" ext=""/>
+        <artifact name="ivy-legacy-publish.xml" ext=""/>
+    </publications>
+</ivy-module>
