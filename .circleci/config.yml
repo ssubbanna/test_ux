@@ -17,7 +17,7 @@ jobs:
          echo "Successfully logged-in to docker"
          docker tag saas_ux:dev ssubbanna/saas_ux:dev
          echo "Successfully tagged the image for upload" 
-         docker push saas_ux:dev
+         docker push ssubbanna/saas_ux:dev
          echo "Successfully pushed the image"
 
      # deploy the image
