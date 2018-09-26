@@ -17,3 +17,20 @@ jobs:
          echo "Successfully tagged the image for upload" 
          docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
          echo "Successfully pushed the image"
+commit-workflow:
+  jobs:
+    - build:
+        filters:
+          tags:
+            only:
+              - /.*/
+    - deploy:
+        requires:
+          - build
+        filters:
+          branches:
+            only:
+              - feature/circleci
+          tags:
+           only:
+              - /^v.*/
