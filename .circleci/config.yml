@@ -10,7 +10,9 @@ jobs:
          docker login -u ssubbanna -p Saanvi_14
 
      # build the application image
-     - run: docker build -t ssubbanna/saas_ux:$CIRCLE_BRANCH .
+     - run: |
+         cd rest/
+         docker build -t ssubbanna/saas_ux:$CIRCLE_BRANCH .
 
      # deploy the image
 #     - run: docker push ssubbanna/saas_ux:$CIRCLE_BRANCH
