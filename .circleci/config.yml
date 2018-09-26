@@ -17,12 +17,3 @@ jobs:
          echo "Successfully tagged the image for upload" 
          docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
          echo "Successfully pushed the image"
-
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-        filters:
-          branches:
-            only: test/master
