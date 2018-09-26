@@ -1,0 +1,11 @@
+_job_defaults: &job_defaults
+  working_directory: ~/test_ux/rest/
+
+version: 2
+jobs:
+  build:
+    docker: 
+      - image: circleci/docker:17.06.0-ce-git
+    steps:
+      - checkout 
+      - run: docker build -t ssubbanna/saas_ux:v1.0
