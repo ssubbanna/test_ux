@@ -12,5 +12,4 @@ jobs:
           name: Inspec Lint Check
           command: |
             pwd
-            cd test_ux/rest/
-            docker build -t saas_ux:v1.0
+            ls
