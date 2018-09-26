@@ -8,4 +8,10 @@ jobs:
       - image: docker:17.06.0-ce-git
     steps:
       - checkout 
-      - run: docker build -t ssubbanna/saas_ux:v1.0
+      - run: 
+	  name: Inspec Lint Check
+	  command: |
+	    pwd
+	    cd test_ux/rest/
+	    docker build -t saas_ux:v1.0
+	
