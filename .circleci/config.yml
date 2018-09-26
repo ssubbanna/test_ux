@@ -10,7 +10,7 @@ jobs:
      - run: |
          cd rest/
          docker build -t ssubbanna/saas_ux:dev .
-         docker save -o saas_ux.tar saas_ux:dev
+         docker save -o saas_ux.tar saas_ux
          docker login -u $CIRCLE_USERNAME -p Saanvi_14
          docker tag saas_ux:dev ssubbanna/saas_ux:dev
          docker push saas_ux:dev
