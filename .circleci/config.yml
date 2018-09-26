@@ -9,7 +9,7 @@ jobs:
          cd rest/
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
-         docker save -o $CIRCLE_PROJECT_REPONAME.tar saas_ux
+         docker save -o $CIRCLE_PROJECT_REPONAME.tar CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
          docker login -u $CIRCLE_USERNAME -p Saanvi_14
          echo "Successfully logged-in to docker"
