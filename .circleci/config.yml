@@ -23,8 +23,8 @@ workflows:
   dev_stage_pre-prod:
     jobs:
       - build:
-          filters:  # using regex filters requires the entire branch to match
+          filters:  
             branches:
-              only:  # only branches matching the below regex filters will run
-                - dev
-                - /test_.*/
+              only:  
+                - master
+#                - /test_.*/
