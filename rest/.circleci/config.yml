@@ -1,66 +1,11 @@
-# 
-defaults: &defaults
-  working_directory: ~/test_ux/rest
-  docker:
-    - image: docker:17.06.0-ce-git
+_job_defaults: &job_defaults
+  working_directory: ~/test_ux/rest/
 
 version: 2
 jobs:
   build:
-    <<: *defaults
+    docker: 
+      - image: circleci/docker:17.06.0-ce-git
     steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Install bash
-          command: apk add --no-cache bash
-      - run:
-          name: Build image
-          command: bin/build.sh
-      - run:
-          name: Save image
-          command: bin/save.sh
-      - persist_to_workspace:
-          root: /workspace
-          paths:
-            - tar
-  deploy:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: /workspace
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Install bash
-          command: apk add --no-cache bash
-      - run:
-          name: Load image from workspace
-          command: bin/load.sh
-      - run:
-          name: Deploy image to Docker Hub
-          command: |
-            docker login --username ${DOCKER_USER} --password ${DOCKER_PASSWORD}
-            bin/deploy.sh
-workflows:
-  version: 2
-  commit-workflow:
-    jobs:
-      - build:
-          filters:
-            tags:
-              only:
-                - /.*/
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - master
-                - feature/circleci
-            tags:
-              only:
-                - /^v.*/
+      - checkout 
+      - run: docker build -t ssubbanna/saas_ux:v1.0
