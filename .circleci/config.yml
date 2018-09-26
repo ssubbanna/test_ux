@@ -27,4 +27,4 @@ workflows:
             branches:
               only:  # only branches matching the below regex filters will run
                 - dev
-                - /user-.*/
+                - /test_.*/
