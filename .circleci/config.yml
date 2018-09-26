@@ -6,14 +6,12 @@ jobs:
      - checkout
      # start proprietary DB using private Docker image
      # with credentials stored in the UI
-     - run: |
-         docker login -u ssubbanna -p Saanvi_14
-
-     # build the application image
+     
      - run: |
          cd rest/
          docker build -t ssubbanna/saas_ux:dev .
          docker save -o saas_ux.tar saas_ux:dev
+         docker login -u $CIRCLE_USERNAME -p Saanvi_14
          docker tag saas_ux:dev ssubbanna/saas_ux:dev
          docker push saas_ux:dev
 
