@@ -9,11 +9,16 @@ jobs:
      
      - run: |
          cd rest/
-         docker build -t ssubbanna/saas_ux:dev .
+         docker build -t saas_ux:dev .
+         echo "Successfully built docker image"
          docker save -o saas_ux.tar saas_ux
+         echo "Successfully saved the docker image"
          docker login -u $CIRCLE_USERNAME -p Saanvi_14
+         echo "Successfully logged-in to docker"
          docker tag saas_ux:dev ssubbanna/saas_ux:dev
+         echo "Successfully tagged the image for upload" 
          docker push saas_ux:dev
+         echo "Successfully pushed the image"
 
      # deploy the image
 #     - run: docker push ssubbanna/saas_ux:$CIRCLE_BRANCH
