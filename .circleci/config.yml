@@ -20,9 +20,11 @@ jobs:
 
 workflows:
   version: 2
-  build_and_test:
+  dev_stage_pre-prod:
     jobs:
-      - build
-        filters:
-          branches:
-            only: test/master
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+#                - /test_.*/
