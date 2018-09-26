@@ -12,7 +12,10 @@ jobs:
      # build the application image
      - run: |
          cd rest/
-         docker build -t ssubbanna/saas_ux:$CIRCLE_BRANCH .
+         docker build -t ssubbanna/saas_ux:dev .
+         docker save -o saas_ux.tar saas_ux:dev
+         docker tag saas_ux:dev ssubbanna/saas_ux:dev
+         docker push saas_ux:dev
 
      # deploy the image
 #     - run: docker push ssubbanna/saas_ux:$CIRCLE_BRANCH
