@@ -5,7 +5,7 @@ version: 2
 jobs:
   build:
     docker: 
-      - image: circleci/docker:17.06.0-ce-git
+      - image: docker:17.06.0-ce-git
     steps:
       - checkout 
       - run: docker build -t ssubbanna/saas_ux:v1.0
