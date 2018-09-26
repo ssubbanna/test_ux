@@ -17,7 +17,14 @@ jobs:
          echo "Successfully tagged the image for upload" 
          docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
          echo "Successfully pushed the image"
-   filters:
-      branches:
-        only:
-          - test-deploy
+
+workflows:
+  version: 2
+  dev_stage_pre-prod:
+    jobs:
+      - build:
+          filters:  # using regex filters requires the entire branch to match
+            branches:
+              only:  # only branches matching the below regex filters will run
+                - dev
+                - /user-.*/
