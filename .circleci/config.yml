@@ -1,15 +1,16 @@
-_job_defaults: &job_defaults
-  working_directory: ~/test_ux/rest/
-
 version: 2
 jobs:
-  build:
-    docker: 
-      - image: docker:17.06.0-ce-git
-    steps:
-      - checkout 
-      - run: 
-          name: Inspec Lint Check
-          command: |
-            cd rest/
-            docker build -t saas_ux:latest .
+ build:
+   machine: true
+   steps:
+     - checkout
+     # start proprietary DB using private Docker image
+     # with credentials stored in the UI
+     - run: |
+         docker login -u ssubbanna -p Saanvi_14
+
+     # build the application image
+     - run: docker build -t ssubbanna/saas_ux:$CIRCLE_BRANCH .
+
+     # deploy the image
+#     - run: docker push ssubbanna/saas_ux:$CIRCLE_BRANCH
