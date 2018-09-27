@@ -28,10 +28,3 @@ workflows:
               only:
                 - master
                 - /test*/
-
-experimental:
-  notify:
-    branches:
-      only:
-        - master
-#test comment 123
