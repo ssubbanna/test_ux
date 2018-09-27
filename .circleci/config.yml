@@ -6,7 +6,7 @@ jobs:
      - checkout
      
      - run: |
-         cd rest
+         cd rest/
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
          docker save -o $CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
