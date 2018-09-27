@@ -27,7 +27,7 @@ workflows:
             branches:
               only:
                 - master
-#                - /test_.*/
+                - /test*/
 
 experimental:
   notify:
