@@ -26,5 +26,8 @@ workflows:
           filters:  
             branches:
               only:  
+          filters:
+            branches:
+              only:
                 - master
 #                - /test_.*/
