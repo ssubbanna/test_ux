@@ -18,11 +18,11 @@ jobs:
          docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
          echo "Successfully pushed the image"
 
-workflows:
-  version: 2
-  dev_stage_pre-prod:
-    jobs:
-      - build:
+#workflows:
+#  version: 2
+#  dev_stage_pre-prod:
+#    jobs:
+#      - build:
 #          filters:
 #            branches:
 #              only:
