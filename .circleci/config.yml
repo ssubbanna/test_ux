@@ -23,8 +23,8 @@ workflows:
   dev_stage_pre-prod:
     jobs:
       - build:
-          filters:
-            branches:
-              only:
-                - master
-                - /test*/
+#          filters:
+#            branches:
+#              only:
+#                - master
+#                - /test*/
