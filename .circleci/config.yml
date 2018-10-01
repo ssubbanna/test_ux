@@ -16,6 +16,7 @@ jobs:
          echo "Successfully built docker image"
          docker save -o $CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
+         pwd
      - persist_to_workspace:
          root: .
          paths:
@@ -25,8 +26,9 @@ jobs:
    <<: *defaults
    machine: true
    steps:
+     - run: pwd
      - attach_workspace:
-         at: .
+         at: ~/project
      - checkout
 
      - run: |
