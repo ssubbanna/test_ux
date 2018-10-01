@@ -12,8 +12,8 @@ jobs:
          ls /home/ 
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
-#         docker save -o $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
-#         echo "Successfully saved the docker image"
+         sudo docker save -o $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         echo "Successfully saved the docker image"
      - persist_to_workspace:
          root: /workspace
          paths:
