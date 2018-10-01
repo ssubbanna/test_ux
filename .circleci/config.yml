@@ -20,7 +20,7 @@ jobs:
          pwd
          ls -ltr tar/
      - persist_to_workspace:
-         root: ~/build/rest/tar
+         root: ~/build/rest/
          paths:
            - tar
 
