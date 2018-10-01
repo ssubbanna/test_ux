@@ -32,8 +32,6 @@ jobs:
      - attach_workspace:
          at: ~/build/rest/
 
-     - checkout
-
      - run: |
          ls
          pwd
