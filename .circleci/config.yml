@@ -11,6 +11,22 @@ jobs:
          echo "Successfully built docker image"
          docker save -o $CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
+     - persist_to_workspace:
+         root: /home/circleci/project
+         paths:
+           - rest
+
+ deploy:
+   machine: true
+   steps:
+     - attach_workspace:
+         at: /home/circleci/project
+     - checkout
+
+     - run: |
+         cd rest/
+         docker load -i $CIRCLE_PROJECT_REPONAME.tar
+         echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
          echo "Successfully logged-in to docker"
          docker tag $CIRCLE_PROJECT_REPONAME:dev $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
@@ -20,12 +36,17 @@ jobs:
 
 workflows:
   version: 2
-  dev_stage_pre-prod:
+  commit-workflow:
     jobs:
       - build:
+          filters:
+            tags:
+              only:
+                - /.*/
+      - deploy:
+          requires:
+            - build
           filters:
             branches:
               only:
                 - master
-#                - /test_.*/
-
