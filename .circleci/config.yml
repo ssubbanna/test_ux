@@ -7,15 +7,16 @@ jobs:
      
      - run: |
          cd rest/
-         WORKSPACE="/workspace/tar"
-         sudo mkdir -p $WORKSPACE
+         WORKSPACE="/home/ubuntu/workspace/tar"
+         mkdir -p $WORKSPACE
          ls /home/ 
+         id -a
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
          sudo docker save -o $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
      - persist_to_workspace:
-         root: /workspace
+         root: /home/ubuntu/workspace
          paths:
            - tar
 
