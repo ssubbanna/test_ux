@@ -26,7 +26,7 @@ jobs:
 
      - run: |
          docker load -i $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar
-	 echo "Succesfully loaded the docker image"
+         echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
          echo "Successfully logged-in to docker"
          docker tag $CIRCLE_PROJECT_REPONAME:dev $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
