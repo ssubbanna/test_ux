@@ -18,8 +18,9 @@ jobs:
          docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
          pwd
+         ls -ltr tar/
      - persist_to_workspace:
-         root: /rest
+         root: ~/rest/tar
          paths:
            - tar
 
@@ -29,7 +30,8 @@ jobs:
    steps:
      - run: pwd
      - attach_workspace:
-         at: /rest
+         at: ~/rest/tar
+
      - checkout
 
      - run: |
