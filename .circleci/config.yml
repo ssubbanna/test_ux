@@ -6,28 +6,26 @@ jobs:
      - checkout
      
      - run: |
-         WORKSPACE="~/workspace/tar"
-         mkdir -p $WORKSPACE
          cd rest/
-         pwd
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
-         sudo docker save -o $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         docker save -o $CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
      - persist_to_workspace:
-         root: ~/workspace
+         root: /home/circleci/project
          paths:
-           - tar
+           - rest
 
  deploy:
    machine: true
    steps:
      - attach_workspace:
-         at: ~/workspace
+         at: /home/circleci/project
      - checkout
 
      - run: |
-         docker load -i ~/$WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar
+         cd rest/
+         docker load -i $CIRCLE_PROJECT_REPONAME.tar
          echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
          echo "Successfully logged-in to docker"
