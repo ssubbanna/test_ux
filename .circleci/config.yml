@@ -1,6 +1,11 @@
+# 
+defaults: &defaults
+  working_directory: /build
+
 version: 2
 jobs:
  build:
+   <<: *defaults
    machine: true
    steps:
      - checkout
@@ -17,6 +22,7 @@ jobs:
            - rest
 
  deploy:
+   <<: *defaults
    machine: true
    steps:
      - attach_workspace:
