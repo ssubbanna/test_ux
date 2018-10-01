@@ -8,6 +8,7 @@ jobs:
      - run: |
          cd rest/
          WORKSPACE="/workspace/tar"
+         mkdir -p $WORKSPACE
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
          docker save -o $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
