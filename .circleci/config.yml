@@ -30,7 +30,7 @@ jobs:
    steps:
      - run: pwd
      - attach_workspace:
-         at: ~/build/rest/tar
+         at: ~/build/rest/
 
      - checkout
 
