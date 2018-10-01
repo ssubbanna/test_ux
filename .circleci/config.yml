@@ -10,7 +10,7 @@ jobs:
          WORKSPACE="~/workspace/tar"
          id -a
          ls /home/ 
-         mkdir -p $WORKSPACE
+         mkdir -p ~/$WORKSPACE
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
          echo "Successfully built docker image"
          sudo docker save -o $WORKSPACE/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
