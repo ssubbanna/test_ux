@@ -1,6 +1,6 @@
 # 
 defaults: &defaults
-  working_directory: /build
+  working_directory: ~/build
 
 version: 2
 jobs:
