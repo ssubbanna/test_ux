@@ -34,6 +34,8 @@ jobs:
      - run: |
          ls
          pwd
+         cd rest/
+         ls
          docker load -i $CIRCLE_PROJECT_REPONAME.tar
          echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
