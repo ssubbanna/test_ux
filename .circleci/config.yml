@@ -35,7 +35,7 @@ jobs:
      - run: |
          ls
          pwd
-         cd rest/
+         cd rest/tar
          ls
          docker load -i $CIRCLE_PROJECT_REPONAME.tar
          echo "Succesfully loaded the docker image"
