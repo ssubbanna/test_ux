@@ -20,11 +20,10 @@ jobs:
    machine: true
    steps:
      - attach_workspace:
-         at: /home/circleci/project
+         at: /home/circleci/project/rest
      - checkout
 
      - run: |
-         cd rest/
          docker load -i $CIRCLE_PROJECT_REPONAME.tar
          echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
