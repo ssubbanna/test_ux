@@ -28,11 +28,13 @@ jobs:
    steps:
      - run: pwd
      - attach_workspace:
-         at: ~/project
+         at: ~/rest
      - checkout
 
      - run: |
-         docker load -i rest/$CIRCLE_PROJECT_REPONAME.tar
+         ls
+         pwd
+         docker load -i $CIRCLE_PROJECT_REPONAME.tar
          echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
          echo "Successfully logged-in to docker"
