@@ -8,7 +8,7 @@ jobs:
  build:
    <<: *defaults
    docker:
-      - image: ubuntu:16.04 
+      - image: docker:17.06.0-ce-git
    steps:
      - checkout
      
@@ -31,7 +31,7 @@ jobs:
  deploy:
    <<: *defaults
    docker:
-      - image: ubuntu:16.04
+      - image: docker:17.06.0-ce-git
    steps:
      - run: pwd
      - attach_workspace:
