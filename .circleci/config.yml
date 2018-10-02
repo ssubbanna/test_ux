@@ -7,6 +7,7 @@ jobs:
 
  build:
    <<: *defaults
+   machine: true
    steps:
      - checkout
      
@@ -28,6 +29,7 @@ jobs:
 
  deploy:
    <<: *defaults
+   machine: true
    steps:
      - run: pwd
      - attach_workspace:
