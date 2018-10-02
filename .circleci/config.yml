@@ -1,33 +1,66 @@
+defaults: &defaults
+  working_directory: ~/build
+  SAAS_VERSION: v1.0
+
 version: 2
 jobs:
  build:
-   machine: true
+   <<: *defaults
+   docker:
+      - image: docker:stable
    steps:
      - checkout
-     
+
+     - setup_remote_docker:
+         docker_layer_caching: true
+
      - run: |
          cd rest/
-         docker build -t $CIRCLE_PROJECT_REPONAME:dev .
+         mkdir tar
+         docker build -t $CIRCLE_PROJECT_REPONAME:$SAAS_VERSION .
          echo "Successfully built docker image"
-         docker save -o $CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
          echo "Successfully saved the docker image"
+     - persist_to_workspace:
+         root: ~/build/rest/
+         paths:
+           - tar
+
+ deploy:
+   <<: *defaults
+   docker:
+      - image: docker:stable
+   steps:
+     - setup_remote_docker:
+         docker_layer_caching: true
+
+     - attach_workspace:
+         at: ~/build/rest/
+
+     - run: |
+         cd rest/tar
+         docker load -i $CIRCLE_PROJECT_REPONAME.tar
+         echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
          echo "Successfully logged-in to docker"
-         docker tag $CIRCLE_PROJECT_REPONAME:dev $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+         docker tag $CIRCLE_PROJECT_REPONAME:$SAAS_VERSION $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$SAAS_VERSION
          echo "Successfully tagged the image for upload" 
-         docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+         docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$SAAS_VERSION
          echo "Successfully pushed the image"
 
 workflows:
   version: 2
-  dev_stage_pre-prod:
+  commit-workflow:
     jobs:
       - build:
-          filters:  
-            branches:
-              only:  
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only:
-                - master
-#                - /test_.*/
+              ignore: /.*/
