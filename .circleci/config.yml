@@ -12,26 +12,14 @@ jobs:
 
      - setup_remote_docker:
          docker_layer_caching: true
-
+     
      - run: |
-         cd rest
+         cd rest/
          mkdir tar
          docker build -t $CIRCLE_PROJECT_REPONAME:dev .
-
- save:
-   <<: *defaults
-   docker:
-      - image: docker:stable
-   steps:
-     - setup_remote_docker:
-         docker_layer_caching: true
-
-     - attach_workspace:
-         at: ~/build/rest/
-
-     - run: |
-         cd rest
+         echo "Successfully built docker image"
          docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         echo "Successfully saved the docker image"
      - persist_to_workspace:
          root: ~/build/rest/
          paths:
@@ -51,26 +39,27 @@ jobs:
      - run: |
          cd rest/tar
          docker load -i $CIRCLE_PROJECT_REPONAME.tar
+         echo "Succesfully loaded the docker image"
          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+         echo "Successfully logged-in to docker"
          docker tag $CIRCLE_PROJECT_REPONAME:dev $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+         echo "Successfully tagged the image for upload" 
          docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+         echo "Successfully pushed the image"
 
 workflows:
   version: 2
   commit-workflow:
     jobs:
       - build:
-          filters:  # required since `deploy` has tag filters AND requires `build`
-            tags:
-              only: /.*/
-      - save:
-          requires:
-            - build
-      - deploy:
-          requires:
-            - save
           filters:
             tags:
-              only: /^v.*/
+              only:
+                - /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
             branches:
-              ignore: /.*/
+              only:
+                - master
