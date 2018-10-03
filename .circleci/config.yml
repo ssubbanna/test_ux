@@ -3,6 +3,7 @@ defaults: &defaults
 
   docker:
      - image: docker:stable
+
 version: 2
 jobs:
  build:
@@ -18,7 +19,7 @@ jobs:
          command: cd rest && docker build -t $CIRCLE_PROJECT_REPONAME:dev .
      - run:
          name: Save image
-         command: echo `pwd` && ls -ltr && mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
      - persist_to_workspace:
          root: /workspace
          paths:
