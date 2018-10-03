@@ -38,7 +38,7 @@ jobs:
          name: Load image
          command: cd tar && docker load -i $CIRCLE_PROJECT_REPONAME.tar
      - run:
-         name: Login to Docker 
+         name: Login to Docker
          command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
      - run:
          name: Tag the docker image
