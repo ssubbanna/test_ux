@@ -1,5 +1,5 @@
 defaults: &defaults
-  working_directory: ~/build
+  working_directory: /workspace
 
 version: 2
 jobs:
@@ -20,7 +20,7 @@ jobs:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
      - persist_to_workspace:
-         root: /workspace
+         root: /workspace/rest
          paths:
            - tar
 
