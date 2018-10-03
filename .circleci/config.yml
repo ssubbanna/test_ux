@@ -52,14 +52,14 @@ workflows:
   commit-workflow:
     jobs:
       - build:
-          filters:
+          filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only:
-                - /.*/
+              only: /.*/
       - deploy:
           requires:
             - build
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only:
-                - master
+              ignore: /.*/
