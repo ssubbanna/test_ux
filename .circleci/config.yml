@@ -1,65 +1,65 @@
 defaults: &defaults
-  working_directory: ~/build
+  working_directory: /workspace
+
+  docker:
+     - image: docker:stable
 
 version: 2
 jobs:
  build:
    <<: *defaults
-   docker:
-      - image: docker:stable
    steps:
      - checkout
 
      - setup_remote_docker:
          docker_layer_caching: true
 
-     - run: |
-         cd rest/
-         mkdir tar
-         docker build -t $CIRCLE_PROJECT_REPONAME:dev .
-         echo "Successfully built docker image"
-         docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
-         echo "Successfully saved the docker image"
+     - run:
+         name: Build image
+         command: cd rest && docker build -t $CIRCLE_PROJECT_REPONAME:dev .
+     - run:
+         name: Save image
+         command: echo `pwd` && ls -ltr && mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
      - persist_to_workspace:
-         root: ~/build/rest/
+         root: /workspace
          paths:
            - tar
 
  deploy:
    <<: *defaults
-   docker:
-      - image: docker:stable
    steps:
      - setup_remote_docker:
          docker_layer_caching: true
 
      - attach_workspace:
-         at: ~/build/rest/
+         at: /workspace
 
-     - run: |
-         cd rest/tar
-         docker load -i $CIRCLE_PROJECT_REPONAME.tar
-         echo "Succesfully loaded the docker image"
-         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-         echo "Successfully logged-in to docker"
-         docker tag $CIRCLE_PROJECT_REPONAME:dev $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
-         echo "Successfully tagged the image for upload" 
-         docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
-         echo "Successfully pushed the image"
+     - run:
+         name: Load image
+         command: cd rest/tar && docker load -i $CIRCLE_PROJECT_REPONAME.tar
+     - run:
+         name: Login to Docker
+         command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+     - run:
+         name: Tag the docker image
+         command: docker tag $CIRCLE_PROJECT_REPONAME:dev $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+     - run:
+         name: Deploy the image to docker hub
+         command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
 
 workflows:
   version: 2
   commit-workflow:
     jobs:
       - build:
-          filters:  # required since `deploy` has tag filters AND requires `build`
+          filters:
             tags:
-              only: /.*/
+              only:
+                - /.*/
       - deploy:
           requires:
             - build
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - master
