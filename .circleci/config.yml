@@ -18,9 +18,9 @@ jobs:
          command: cd rest && docker build -t $CIRCLE_PROJECT_REPONAME:dev .
      - run:
          name: Save image
-         command: echo `pwd` && mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         command: echo `pwd` && ls -ltr && mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
      - persist_to_workspace:
-         root: /workspace/rest
+         root: /workspace
          paths:
            - tar
 
