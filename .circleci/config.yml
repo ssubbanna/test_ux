@@ -18,7 +18,7 @@ jobs:
          command: cd rest && mkdir tar
      - run:
          name: Build image
-         command: cd rest/tar && docker build -t $CIRCLE_PROJECT_REPONAME:dev .
+         command: cd rest && docker build -t $CIRCLE_PROJECT_REPONAME:dev .
      - run:
          name: Save image
          command: docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
