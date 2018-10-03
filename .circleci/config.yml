@@ -14,14 +14,11 @@ jobs:
          docker_layer_caching: true
 
      - run:
-         name: make directory
-         command: cd rest && mkdir tar
-     - run:
          name: Build image
          command: cd rest && docker build -t $CIRCLE_PROJECT_REPONAME:dev .
      - run:
          name: Save image
-         command: docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
+         command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_REPONAME
      - persist_to_workspace:
          root: ~/build/rest/
          paths:
