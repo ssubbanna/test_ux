@@ -17,6 +17,7 @@ jobs:
      - run:
          name: Build image
          command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
+
      - run:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
@@ -42,21 +43,21 @@ jobs:
          command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
      - run:
          name: Deploy the image to docker hub
-         command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+         command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$DOCKER_REL
 
 workflows:
   version: 2
   commit-workflow:
     jobs:
       - build:
-          filters:
+          filters:  # required since `deploy` has tag filters AND requires `build`
             tags:
-              only:
-                - /.*/
+              only: /.*/
       - deploy:
           requires:
             - build
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only:
-                - master
+              ignore: /.*/
