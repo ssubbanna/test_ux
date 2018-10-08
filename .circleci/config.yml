@@ -20,22 +20,14 @@ jobs:
      - run:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+     - run:
+         name: npm testcase execution
+         command: cd rest && npm test
+
      - persist_to_workspace:
          root: /workspace
          paths:
            - tar
-
- test:
-   <<: *defaults
-   steps:
-     - setup_remote_docker:
-         docker_layer_caching: true
-
-     - checkout
-
-     - run:
-         name: npm testcase execution
-         command: cd rest && npm test
 
  deploy:
    <<: *defaults
@@ -65,13 +57,7 @@ workflows:
             tags:
               only:
                 - /.*/
-      - test:
-          requires:
-            - build
-          filters:
-            tags:
-              only:
-                - /.*/
+
       - deploy:
           requires:
             - test
