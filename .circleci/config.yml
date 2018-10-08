@@ -42,9 +42,6 @@ jobs:
          at: /workspace
 
      - run:
-         name: Install npm
-         command: apt install -y npm
-     - run:
          name: execute npm testcases
          command: cd rest && npm test
 
