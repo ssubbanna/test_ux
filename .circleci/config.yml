@@ -21,9 +21,6 @@ jobs:
      - run:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-     - run:
-         name: npm testcase execution
-         command: cd rest && npm test
 
      - persist_to_workspace:
          root: /testspace
