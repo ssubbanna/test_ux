@@ -27,7 +27,6 @@ jobs:
            - tar
 
  test:
-   <<: *defaults
 
    docker:
      - image: circleci/node:8.6
