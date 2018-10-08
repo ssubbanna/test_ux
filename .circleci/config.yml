@@ -1,5 +1,6 @@
 defaults: &defaults
   working_directory: /workspace
+  testing_directory: /testspace
 
   docker:
      - image: docker:stable
@@ -25,9 +26,27 @@ jobs:
          command: cd rest && npm test
 
      - persist_to_workspace:
+         root: /testspace
+         paths:
+           - rest
+
+     - persist_to_workspace:
          root: /workspace
          paths:
            - tar
+
+ test:
+   <<: *defaults
+   steps:
+     - setup_remote_docker:
+         docker_layer_caching: true
+
+     - attach_workspace:
+         at: /testspace
+
+     - run:
+         name: execute npm testcases
+         command: npm test
 
  deploy:
    <<: *defaults
@@ -58,9 +77,17 @@ workflows:
               only:
                 - /.*/
 
-      - deploy:
+      - test:
           requires:
             - build
+          filters:
+            tags:
+              only:
+                - /.*/
+
+      - deploy:
+          requires:
+            - test
           filters:
             branches:
               only:
