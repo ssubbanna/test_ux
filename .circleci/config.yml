@@ -25,7 +25,6 @@ jobs:
          root: /workspace
          paths:
            - tar
-           - rest
 
  test:
    <<: *defaults
@@ -34,11 +33,10 @@ jobs:
      - image: circleci/node:8.6
 
    steps:
+     - checkout
+
      - setup_remote_docker:
          docker_layer_caching: true
-
-     - attach_workspace:
-         at: /workspace
 
      - run:
          name: execute npm testcases
