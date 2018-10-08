@@ -21,15 +21,11 @@ jobs:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 
-     - persist_to_testspace:
-         root: /workspace
-         paths:
-           - rest
-
      - persist_to_workspace:
          root: /workspace
          paths:
            - tar
+           - rest
 
  test:
    <<: *defaults
