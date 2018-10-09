@@ -1,9 +1,13 @@
-const request = require('request'),
-      config = require('./config.js'),
-      redis = require('./redis.js');
-
+const request = require('request');
+let config, redis, logger;
+if(process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
+    config, redis, logger = null;
+} else {
+    config = require('./config.js'),
+    redis = require('./redis.js');
+    logger = config.logger;
+}
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-let logger = config.logger;
 
 Object.flatten = function(data) {
     var result = {};
@@ -27,7 +31,7 @@ Object.flatten = function(data) {
     }
     recurse(data, "");
     return result;
-}
+};
 var populateSites =  function(data, hostdata) {
     try {
         const rootNode = data.data.network.siteTree,
@@ -203,8 +207,11 @@ var getAllDomainNodes = () => {
 var getDomainNodeInfo = (domainNodeId) => {
     return redis.hgetall('xmchosts:id:' + domainNodeId);
 };
+
 module.exports.addXmcHost = addXmcHost;
 module.exports.getAllDomainNodes = getAllDomainNodes;
 module.exports.getDomainNodeInfo = getDomainNodeInfo;
+
+
 
 
