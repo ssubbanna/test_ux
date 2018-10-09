@@ -27,7 +27,6 @@ jobs:
            - tar
 
  test:
-
    docker:
      - image: circleci/node:8.6
 
@@ -38,8 +37,11 @@ jobs:
          docker_layer_caching: true
 
      - run:
+         name: install npm
+         command: cd rest && npm install
+     - run:
          name: execute npm testcases
-         command: cd rest && npm install && npm test
+         command: cd rest npm test
 
  deploy:
    <<: *defaults
