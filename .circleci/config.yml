@@ -41,7 +41,7 @@ jobs:
          command: cd rest && npm install
      - run:
          name: execute npm testcases
-         command: cd rest npm test > /tmp/log 2>&1 && logfile=`cat /tmp/log` && echo $logfile
+         command: cd rest && npm test > /tmp/log 2>&1 && logfile=`cat /tmp/log` && echo $logfile
 
  deploy:
    <<: *defaults
