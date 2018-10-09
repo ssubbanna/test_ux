@@ -1,3 +1,5 @@
+"use strict";
+
 const request = require('request');
 let config, redis, logger;
 if(process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
