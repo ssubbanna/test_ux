@@ -39,7 +39,7 @@ jobs:
 
      - run:
          name: execute npm testcases
-         command: cd rest && npm test
+         command: cd rest && npm install && npm test
 
  deploy:
    <<: *defaults
