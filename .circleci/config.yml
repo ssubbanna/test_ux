@@ -17,14 +17,31 @@ jobs:
      - run:
          name: Build image
          command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
-
      - run:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+
      - persist_to_workspace:
          root: /workspace
          paths:
            - tar
+
+ test:
+   docker:
+     - image: circleci/node:8.6
+
+   steps:
+     - checkout
+
+     - setup_remote_docker:
+         docker_layer_caching: true
+
+     - run:
+         name: install npm
+         command: cd rest && npm install
+     - run:
+         name: execute npm testcases
+         command: cd rest && pwd && npm test
 
  deploy:
    <<: *defaults
@@ -39,25 +56,34 @@ jobs:
          name: Load image
          command: cd tar && docker load -i $CIRCLE_PROJECT_REPONAME.tar
      - run:
-         name: Login to Docker
+         name: Login to docker hub
          command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
      - run:
-         name: Deploy the image to docker hub
-         command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:$DOCKER_REL
+         name: Deploy saas_ux image to docker hub
+         command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
 
 workflows:
   version: 2
   commit-workflow:
     jobs:
       - build:
-          filters:  # required since `deploy` has tag filters AND requires `build`
+          filters:
             tags:
-              only: /.*/
-      - deploy:
+              only:
+                - /.*/
+
+      - test:
           requires:
             - build
           filters:
             tags:
-              only: /^v.*/
+              only:
+                - /.*/
+
+      - deploy:
+          requires:
+            - test
+          filters:
             branches:
-              ignore: /.*/
+              only:
+                - master
