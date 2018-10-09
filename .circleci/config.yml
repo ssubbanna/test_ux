@@ -33,9 +33,6 @@ jobs:
    steps:
      - checkout
 
-     - setup_remote_docker:
-         docker_layer_caching: true
-
      - run:
          name: install npm
          command: cd rest && npm install
