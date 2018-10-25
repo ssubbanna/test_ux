@@ -1,3 +1,10 @@
+//create the logs folder if it does not exist
+const fs = require('fs');
+const dir = './logs';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
 const opts = {
     //errorEventName:'error',
     logDirectory:'./logs', // NOTE: folder must exist and be writable...
