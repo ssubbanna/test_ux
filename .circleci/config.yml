@@ -1,115 +1,15 @@
-defaults: &defaults
-  working_directory: /workspace
-
-  docker:
-     - image: docker:stable
-
 version: 2.1
 orbs:
-  anchore: anchore/anchore-engine@1.1.0
-
+  anchore: anchore/anchore-engine@1.0.0
 jobs:
-  build:
-    <<: *defaults
-
-    steps:
-      - checkout
-
-      - run:
-         name: Build image
-         command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
-
-      - run:
-         name: Save image
-         command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-
-      - persist_to_workspace:
-          root: /workspace
-          paths:
-            - tar
-
   local_image_scan:
-    <<: *defaults
     executor: anchore/anchore_engine
-
     steps:
       - checkout
-
-      - setup_remote_docker:
-         docker_layer_caching: true
-
-
+      - run:
+          name: build container
+          command: docker build -t ${CIRCLE_PROJECT_REPONAME}:ci .
       - anchore/analyze_local_image:
-          image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
-          timeout: '300'
+          image_name: ${CIRCLE_PROJECT_REPONAME}:ci
+          timeout: '500'
           analysis_fail: True
-
-
-  test:
-    docker:
-      - image: circleci/node:8.6
-
-    steps:
-      - checkout
- 
-      - setup_remote_docker:
-          docker_layer_caching: true
-
-      - run:
-          name: install npm
-          command: cd rest && npm install
-      - run:
-          name: execute npm testcases
-          command: cd rest && pwd && npm test
-
-  deploy:
-    <<: *defaults
-    steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
-
-      - attach_workspace:
-          at: /workspace
-
-      - run:
-          name: Load image
-          command: cd tar && docker load -i $CIRCLE_PROJECT_REPONAME.tar
-      - run:
-          name: Login to docker hub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-      - run:
-          name: Deploy saas_ux image to docker hub
-          command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
-
-workflows:
-  version: 2
-  commit-workflow:
-    jobs:
-      - build:
-          filters:
-            tags:
-              only:
-                - /.*/
-
-      - local_image_scan:
-          filters:
-            tags:
-              only:
-                - /.*/
-
-      - test:
-          requires:
-            - build
-            - local_image_scan
-          filters:
-            tags:
-              only:
-                - /.*/
-
-      - deploy:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - master
