@@ -6,7 +6,7 @@ defaults: &defaults
 
 version: 2.1
 orbs:
-  anchore-engine: anchore/anchore-engine@1.1.0
+  anchore: anchore/anchore-engine@1.1.0
 
 jobs:
   build:
@@ -29,6 +29,7 @@ jobs:
             - tar
 
   local_image_scan:
+    <<: *defaults
     executor: anchore/anchore_engine
 
     steps:
