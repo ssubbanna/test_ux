@@ -36,10 +36,10 @@ jobs:
          registry_user: "${DOCKER_USER}"
          registry_pass: "${DOCKER_PASS}"
 
-     - persist_to_workspace:
-         root: /workspace
-         paths:
-           - tar
+      - persist_to_workspace:
+          root: /workspace
+          paths:
+            - tar
 
  test:
    docker:
