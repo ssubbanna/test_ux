@@ -8,9 +8,9 @@ jobs:
       - checkout
       - run:
           name: build container
-          command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
+          command: cd rest && docker build -t ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev .
       - anchore/analyze_local_image:
-          image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+          image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
           timeout: '500'
           analysis_fail: True
 
