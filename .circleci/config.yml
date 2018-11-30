@@ -1,15 +1,13 @@
 version: 2.1
 orbs:
-  anchore: anchore/anchore-engine@1.0.0
-jobs:
-  local_image_scan:
-    executor: anchore/anchore_engine
-    steps:
-      - checkout
-      - run:
-          name: build container
-          command: docker build -t ${CIRCLE_PROJECT_REPONAME}:ci .
-      - anchore/analyze_local_image:
-          image_name: ${CIRCLE_PROJECT_REPONAME}:ci
-          timeout: '500'
-          analysis_fail: True
+  anchore-engine: anchore/anchore-engine@1.0.0
+workflows:
+  scan_image:
+    jobs:
+      - anchore/image_scan:
+          image_name: ssubbanna/test_ux:dev
+          timeout: '300'
+          private_registry: True
+          registry_name: docker.io
+          registry_user: "${DOCKER_USER}"
+          registry_pass: "${DOCKER_PASS}"
