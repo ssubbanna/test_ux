@@ -4,28 +4,31 @@ defaults: &defaults
   docker:
      - image: docker:stable
 
-version: 2
+version: 2.1
+orbs:
+  anchore-engine: anchore/anchore-engine@1.0.0
+
 jobs:
  build:
    <<: *defaults
 
-   orbs:
-     anchore-engine: anchore/anchore-engine@1.0.0
+  local_image_scan:
+    executor: anchore/anchore_engine
 
-   steps:
-     - checkout
+    steps:
+      - checkout
 
-     - setup_remote_docker:
+      - setup_remote_docker:
          docker_layer_caching: true
 
-     - run:
+      - run:
          name: Build image
          command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
-     - run:
+      - run:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 
-     - anchore/image_scan:
+      - anchore/analyze_local_image:
          image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
          timeout: '300'
          private_registry: True
