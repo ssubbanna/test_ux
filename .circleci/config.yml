@@ -6,7 +6,7 @@ defaults: &defaults
 
 version: 2.1
 orbs:
-  anchore-engine: anchore/anchore-engine
+  anchore-engine: anchore/anchore-engine@1.1.0
 
 jobs:
   local_image_scan:
