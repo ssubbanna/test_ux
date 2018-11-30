@@ -9,9 +9,11 @@ orbs:
   anchore-engine: anchore/anchore-engine@1.1.0
 
 jobs:
+  build:
+    <<: *defaults
+
   local_image_scan:
     executor: anchore/anchore_engine
-    <<: *defaults
 
     steps:
       - checkout
