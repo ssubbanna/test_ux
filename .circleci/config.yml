@@ -11,6 +11,7 @@ orbs:
 jobs:
   build:
     <<: *defaults
+    executor: anchore/anchore_engine 
 
     steps:
       - checkout
@@ -23,13 +24,10 @@ jobs:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 
-      local_image_scan:
-         executor: anchore/anchore_engine
-
-         - anchore/analyze_local_image:
-             image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
-             timeout: '300'
-             analysis_fail: True
+      - anchore/analyze_local_image:
+          image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+          timeout: '300'
+          analysis_fail: True
 
       - persist_to_workspace:
           root: /workspace
