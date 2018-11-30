@@ -8,6 +8,10 @@ version: 2
 jobs:
  build:
    <<: *defaults
+
+   local_image_scan:
+     executor: anchore/anchore_engine
+
    steps:
      - checkout
 
