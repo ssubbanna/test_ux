@@ -13,3 +13,13 @@ jobs:
           image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
           timeout: '500'
           analysis_fail: True
+
+workflows:
+  version: 2.1
+  commit-workflow:
+    jobs:
+      - local_image_scan:
+          filters:
+            tags:
+              only:
+                - /.*/
