@@ -12,6 +12,22 @@ jobs:
   build:
     <<: *defaults
 
+    steps:
+      - checkout
+
+      - run:
+         name: Build image
+         command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
+
+      - run:
+         name: Save image
+         command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+
+      - persist_to_workspace:
+          root: /workspace
+          paths:
+            - tar
+
   local_image_scan:
     executor: anchore/anchore_engine
 
@@ -21,22 +37,12 @@ jobs:
       - setup_remote_docker:
          docker_layer_caching: true
 
-      - run:
-         name: Build image
-         command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
-      - run:
-         name: Save image
-         command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
 
       - anchore/analyze_local_image:
           image_name: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
           timeout: '300'
           analysis_fail: True
 
-      - persist_to_workspace:
-          root: /workspace
-          paths:
-            - tar
 
   test:
     docker:
@@ -84,9 +90,18 @@ workflows:
               only:
                 - /.*/
 
+      - local_image_scan:
+          requires:
+            - build
+          filters:
+            tags:
+              only:
+                - /.*/
+
       - test:
           requires:
             - build
+            - local_image_scan
           filters:
             tags:
               only:
