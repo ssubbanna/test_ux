@@ -1,5 +1,5 @@
-          analysis_fail: True
-rking_directory: /workspace
+defaults: &defaults
+  working_directory: /workspace
 
   docker:
      - image: docker:stable
