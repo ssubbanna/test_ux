@@ -92,8 +92,6 @@ workflows:
                 - /.*/
 
       - local_image_scan:
-          requires:
-            - build
           filters:
             tags:
               only:
