@@ -1,15 +1,13 @@
 defaults: &defaults
   working_directory: /workspace
 
-  docker:
-     - image: docker:stable
-
 version: 2.1
 orbs:
   anchore: anchore/anchore-engine@1.0.0
 jobs:
  build:
    executor: anchore/anchore_engine
+   <<: *defaults
    steps:
      - checkout
      - run:
@@ -43,6 +41,9 @@ jobs:
 
  deploy:
    <<: *defaults
+   docker:
+      - image: docker:stable
+
    steps:
      - setup_remote_docker:
          docker_layer_caching: true
