@@ -9,6 +9,7 @@ orbs:
   anchore: anchore/anchore-engine@1.0.0
 jobs:
  build:
+   executor: anchore/anchore_engine
    <<: *defaults
    steps:
      - checkout
