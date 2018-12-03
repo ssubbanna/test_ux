@@ -10,7 +10,6 @@ orbs:
 jobs:
  build:
    executor: anchore/anchore_engine
-   <<: *defaults
    steps:
      - checkout
      - setup_remote_docker:
@@ -24,6 +23,11 @@ jobs:
      - anchore/analyze_local_image:
          image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
          timeout: '500'
+     - persist_to_workspace:
+         root: /workspace
+         paths:
+           - tar
+
 
  test:
    docker:
