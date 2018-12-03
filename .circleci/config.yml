@@ -12,8 +12,6 @@ jobs:
    executor: anchore/anchore_engine
    steps:
      - checkout
-     - setup_remote_docker:
-         docker_layer_caching: true
      - run:
          name: Build image
          command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
