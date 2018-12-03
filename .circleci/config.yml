@@ -15,13 +15,13 @@ jobs:
      - run:
          name: Save image
          command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
-     - anchore/analyze_local_image:
-         image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
-         timeout: '500'
      - persist_to_workspace:
          root: /tmp/workspace
          paths:
            - tar
+     - anchore/analyze_local_image:
+         image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
+         timeout: '500'
 
 
  test:
