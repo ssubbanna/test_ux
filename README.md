@@ -1,7 +1,7 @@
 # SaaS_UX_test
 SaaS UX test repo
 
-[![Packages Build Status](https://circleci.com/gh/extremenetworks/saas_ux_test/tree/master.svg?style=shield&circle-token=b619b21089647f85e198d5392e946a3c0fec7637)](https://circleci.com/gh/extremenetworks/saas_ux_test)
+[![Packages Build Status](https://circleci.com/gh/ssubbanna/test_ux/tree/master.svg?style=shield&circle-token=b05d07fdd17409513e62b1062708b5deab3fd986)](https://circleci.com/gh/ssubbanna/test_ux)
 
 ## Building SaaS UI docker image
 
