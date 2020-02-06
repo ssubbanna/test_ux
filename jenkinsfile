@@ -3,4 +3,5 @@ node {
 echo 'Hello Santhosh, please welcome to jenkins pipeline'
 echo 'this is your first pipeline project execution'
 echo 'this is your second pipeline execution'
+echo 'this is your third pipeline execution'
 }
