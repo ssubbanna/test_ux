@@ -1,0 +1,4 @@
+#!/usr/bin/env groovy
+node {
+echo 'Hello Santhosh, please welcome to jenkins pipeline'
+}
