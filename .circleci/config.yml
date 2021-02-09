@@ -21,10 +21,7 @@ jobs:
          paths:
            - tar
      - anchore/analyze_local_image:
-         dockerfile_path: ./Dockerfile
          image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
-         policy_bundle_file_path: .circleci/.anchore/policy_bundle.json
-         policy_failure: true
          timeout: '500'
 
 
