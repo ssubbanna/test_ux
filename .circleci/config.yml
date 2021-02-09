@@ -1,15 +1,21 @@
 defaults: &defaults
   working_directory: /tmp/workspace
-
+  docker:
+     - image: docker:stable
+     
 version: 2.1
 orbs:
-  anchore: anchore/anchore-engine@1.0.0
+  anchore: anchore/anchore-engine@1.8.4
 jobs:
  build:
    executor: anchore/anchore_engine
    <<: *defaults
    steps:
      - checkout
+
+     - setup_remote_docker:
+         docker_layer_caching: true
+     
      - run:
          name: Build image
          command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
