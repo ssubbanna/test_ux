@@ -1,7 +1,89 @@
+efaults: &defaults
+  working_directory: /tmp/workspace
+
 version: 2.1
 orbs:
-  node: circleci/node@3.0.0
+  anchore: anchore/anchore-engine@1.8.4
+jobs:
+ build:
+   executor: anchore/anchore_engine
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         name: Build image
+         command: cd rest && docker build -t $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev .
+     - run:
+         name: Save image
+         command: mkdir tar && docker save -o tar/$CIRCLE_PROJECT_REPONAME.tar $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+     - persist_to_workspace:
+         root: /tmp/workspace
+         paths:
+           - tar
+     - anchore/analyze_local_image:
+         image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
+         timeout: '500'
+
+
+ test:
+   docker:
+     - image: circleci/node:8.6
+
+   steps:
+     - checkout
+
+     - run:
+         name: install npm
+         command: cd rest && npm install
+     - run:
+         name: execute npm testcases
+         command: cd rest && npm test
+
+ deploy:
+   <<: *defaults
+   docker:
+      - image: docker:stable
+
+   steps:
+     - setup_remote_docker:
+         docker_layer_caching: true
+
+     - attach_workspace:
+         at: /tmp/workspace
+
+     - run:
+         name: Load image
+         command: cd tar && docker load -i $CIRCLE_PROJECT_REPONAME.tar
+     - run:
+         name: Login to docker hub
+         command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+     - run:
+         name: Deploy saas_ux image to docker hub
+         command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
+
 workflows:
-  node-tests:
+  version: 2.1
+  commit-workflow:
     jobs:
-      - node/test
+      - build:
+          filters:
+            tags:
+              only:
+                - /.*/
+
+      - test:
+          requires:
+            - build
+          filters:
+            tags:
+              only:
+                - /.*/
+
+      - deploy:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                - master
