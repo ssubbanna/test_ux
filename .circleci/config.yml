@@ -3,7 +3,7 @@ defaults: &defaults
 
 version: 2.1
 orbs:
-  anchore: anchore/anchore-engine@1.8.4
+  anchore: anchore/anchore-engine@1.0.0
 jobs:
  build:
    executor: anchore/anchore_engine
