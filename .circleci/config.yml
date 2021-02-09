@@ -58,7 +58,7 @@ jobs:
          name: Login to docker hub
          command: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
      - run:
-         name: Deploy saas_ux image to docker hub
+         name: Deploy test_ux image to docker hub
          command: docker push $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME:dev
 
 workflows:
