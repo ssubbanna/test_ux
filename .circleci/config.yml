@@ -3,7 +3,7 @@ defaults: &defaults
 
 version: 2.1
 orbs:
-  anchore: anchore/anchore-engine@1.3.0
+  anchore: anchore/anchore-engine@1.0.0
 jobs:
  build:
    executor: anchore/anchore_engine
@@ -20,9 +20,9 @@ jobs:
          root: /tmp/workspace
          paths:
            - tar
-     - anchore/analyze_local_image:
-         image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
-         timeout: '500'
+ #    - anchore/analyze_local_image:
+ #        image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}:dev
+ #        timeout: '500'
 
  test:
    docker:
